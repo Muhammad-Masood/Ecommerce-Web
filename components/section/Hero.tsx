@@ -24,9 +24,9 @@ const lato_light = Lato({
 
 const Hero = ({ data }: { data: HeroSecData }) => {
   return (
-    <main className="flex justify-between lg:flex-row sm: flex-col">
+    <main className="flex justify-between lg:flex-row sm:flex-col">
       <div
-        className={`mt-8 space-y-9 flex flex-col items-center sm:items-start`}
+        className={`lg:mt-8 sm:mt-3 space-y-9 flex flex-col items-start`}
       >
         <Badge
           variant={"default"}
@@ -35,12 +35,12 @@ const Hero = ({ data }: { data: HeroSecData }) => {
           Sale 70%
         </Badge>
         <p
-          className={`text-center sm:text-left font-extrabold sm:text-6xl text-slate-900 dark:text-white tracking-wider ${lato.className}`}
+          className={`font-extrabold text-[3rem] lg:text-[3.5rem] text-slate-900 dark:text-white lg:tracking-wider trackig-wide ${sora.className} leading-[55px] lg:leading-[60px]`}
         >
           An Industrial Take on Streetwear
         </p>
         <p
-          className={`text-center sm:text-left mt-4  text-slate-700 dark:text-slate-400 ${sora_light.className} w-[70%]`}
+          className={`mt-4  text-slate-700 dark:text-slate-400 ${sora_light.className}`}
         >
           Anyone can beat you but no one can beat your outfit as long as you
           wear Dine outfits.
@@ -48,14 +48,14 @@ const Hero = ({ data }: { data: HeroSecData }) => {
         <div>
           <Link href="/shop">
             <Button
-              className={`bg-black py-9 sm:text-left text-md ${cabin.className} font-bold max-w-[150px] tracking-wider`}
+              className={`bg-black py-[2rem] sm:text-left text-md ${sora_d.className} font-bold lg:max-w-[150px] tracking-wider space-x-3`}
             >
               <ShoppingCart className="h-6 w-6" />
               <p className="text-center">Start Shopping</p>
             </Button>
           </Link>
         </div>
-        <div className="flex flex-col flex-shrink  space-x-3  sm:flex-row space-y-2 opacity-50">
+        <div className="flex flex-col flex-shrink  space-x-3 lg:flex-row space-y-2 opacity-50">
           <Image src={Featured1} alt="Featured1"></Image>
           <Image src={Featured2} alt="Featured2"></Image>
           <Image src={Featured3} alt="Featured3"></Image>
@@ -64,13 +64,13 @@ const Hero = ({ data }: { data: HeroSecData }) => {
       </div>
 
       <div className="flex-shrink flex-grow flex">
-        <div className="bg-orange-50 rounded-[45%] w-[600px] h-[600px] ">
+        <div className="bg-orange-50 rounded-[45%] w-[600px] h-[600px] hidden lg:block">
           <Image
             src="/hero.png"
             alt="hero image"
             width={600}
             height={600}
-            className="top-14 absolute"
+            className="lg:top-14 absolute"
           ></Image>
         </div>
       </div>

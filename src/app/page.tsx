@@ -5,13 +5,17 @@ import Promotions from "../../components/section/NewArrivals";
 import Desc from "../../components/section/desc";
 import { HeroSecData, PImage, Product } from "./utils/types";
 import {
+  fetchCategories,
   fetchFeaturedData,
   fetchFeaturedProducts,
   fetchHeroSecData,
+  fetchLogo,
   fetchNewArrivalsData,
 } from "./data";
 import Featured from "components/section/Featured";
 import NewArrivals from "../../components/section/NewArrivals";
+import { CartContextProvider } from "@/providers/CartContext";
+import Navbar from "components/section/Navbar";
 
 export default async function Home() {
   const featuredProducts: Product[] = await fetchFeaturedProducts();
@@ -29,14 +33,16 @@ export default async function Home() {
     .reverse();
 
   return (
-    <main>
-      <Hero data={heroSecData} />
-      <div className="space-y-40">
-      <NewArrivals data={mostRecentProducts} />
-      <Featured featuredProducts={featuredProducts} data={featuredData} />
-      <Desc descImage={newArrivalsData[0].main_image}/>
-      <Newsletter />
+    <main className="space-y-40">
+      <div className="main space-y-[5rem]">
+        <Hero data={heroSecData} />
+        <NewArrivals data={mostRecentProducts} />
+        <Featured featuredProducts={featuredProducts} data={featuredData} />
       </div>
+      <div>
+        <Desc descImage={newArrivalsData[0].main_image} />
+      </div>
+      <Newsletter />
     </main>
   );
 }

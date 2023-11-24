@@ -38,7 +38,7 @@ export default function Page() {
   console.log(total);
 
   return (
-    <div className="mb-44">
+    <div className="mb-44 main">
       <div>
         <h3 className="scroll-m-20 text-2xl font-bold tracking-tight text-black -ml-12">
           Shopping Cart

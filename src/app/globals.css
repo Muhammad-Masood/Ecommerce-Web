@@ -85,3 +85,13 @@
     @apply font-poppins
   }
 }
+
+@layer base{
+  .main{ /* main container */
+    @apply lg:mx-[8rem] md:mx-[4rem] mx-[2rem]
+  }
+
+  .textformat{
+    @apply lg:text-center sm:text-left
+  }
+}

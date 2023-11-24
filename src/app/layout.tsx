@@ -10,6 +10,7 @@ import Menu from "components/section/Menu";
 import { MenuProps } from "components/section/Menu";
 import { fetchCategories, fetchLogo } from "./data";
 import { PImage } from "./utils/types";
+// import {headers} from "next/headers";
 
 export const lato = Lato({
   subsets: ["latin"],
@@ -52,9 +53,13 @@ export default async function RootLayout({
 }) {
   const categories = await fetchCategories();
   const { logo }: any = await fetchLogo();
+  // const headersList = headers();
+  // const pathname = headersList.get("next-url");
+  // console.log(pathname);
+  console.log('children', children);
   return (
     <html lang="en">
-      <body className="px-32 my-8 space-y-24 max-w-[100vw]">
+      <body className="my-[2rem] space-y-[5rem]">
         <CartContextProvider>
           <Navbar navLinks={categories} logo={logo} />
           {children}

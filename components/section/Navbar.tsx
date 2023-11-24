@@ -33,13 +33,13 @@ const Navbar = ({ navLinks, logo }: { navLinks: Category[]; logo: PImage }) => {
 
   return (
     <nav
-      className={`flex justify-between items-center ${sora_light.className} space-x-4`}
+      className={`flex justify-between items-center ${sora_light.className} space-x-4 main`}
     >
       <Link href="/">
         <Image src={logo.asset.url} alt="logo" width={140} height={140} />
       </Link>
 
-      <div className="hidden md:block lg:block pt-1">
+      <div className="hidden lg:block pt-1">
         <NavigationMenu>
           <NavigationMenuList className="space-x-14">
             <NavigationMenuItem className="text-[16px]">
@@ -59,7 +59,7 @@ const Navbar = ({ navLinks, logo }: { navLinks: Category[]; logo: PImage }) => {
         </NavigationMenu>
       </div>
 
-      <div className="hidden md:block lg:block">
+      <div className="hidden lg:block">
         <div className="flex border border-black-600 rounded-lg items-center  gap-x-6">
           <Search className="bg-white rounded-l h-4 pl-2" />
           <input
@@ -70,7 +70,7 @@ const Navbar = ({ navLinks, logo }: { navLinks: Category[]; logo: PImage }) => {
         </div>
       </div>
 
-      <div className="p-2 rounded-full bg-gray-200 hover:scale-110 transition duration-300  hidden lg:block md:block relative">
+      <div className="p-2 rounded-full bg-gray-200 hover:scale-110 transition duration-300  hidden lg:block relative">
         <Link href="/cart">
           <ShoppingCart />
           <span className="absolute top-[-10px] right-0 h-6 w-6 text-center rounded-full bg-[#f02d34] text-white">
@@ -79,7 +79,7 @@ const Navbar = ({ navLinks, logo }: { navLinks: Category[]; logo: PImage }) => {
         </Link>
       </div>
 
-      <div className="lg:hidden md:hidden sm:block ">
+      <div className="lg:hidden">
         <Sheet open={isOpen}>
           <SheetTrigger onClick={() => setIsOpen(true)}>
             <Menu />

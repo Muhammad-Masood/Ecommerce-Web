@@ -1,6 +1,6 @@
-import ProductCard from "../../../components/section/ProductCard";
+import ProductCard from "components/section/ProductCard";
 import { fetchAllProducts } from "../data";
-import { client } from "../utils/sanity-client";
+// import { client } from "../utils/sanity-client";
 import { Product } from "../utils/types";
 
 const Shop = async () => {
@@ -9,7 +9,7 @@ const Shop = async () => {
 
   if (products) {
     return (
-      <div className="grid sm: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-14">
+      <div className="grid sm: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-14 main">
         {products.map((product, index) => (
           <ProductCard key={index} prop={product}></ProductCard>
         ))}

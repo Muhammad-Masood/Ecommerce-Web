@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   console.log("fetched by id: ",filterProduct);
 
   return (
-    <div>
+    <div className="main">
       <ProductView {...filterProduct} />
 
       {/* <div>
