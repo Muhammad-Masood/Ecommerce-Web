@@ -55,6 +55,7 @@ export const fetchNewArrivalsData = async () => {
         category -> {name},
         main_image {asset-> {url}},
         price,
+        size[]->{name},
         subCategory,
         _createdAt
     }`,

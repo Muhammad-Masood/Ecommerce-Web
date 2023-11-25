@@ -94,4 +94,12 @@
   .textformat{
     @apply lg:text-center sm:text-left
   }
+
+  .desc-heading{
+    @apply scroll-m-20  font-semibold tracking-wide leading-6 text-[1.125rem]
+  }
+  
+  .desc-subheading{
+    @apply text-[1rem]
+  }
 }

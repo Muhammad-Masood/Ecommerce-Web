@@ -32,6 +32,11 @@ export const sora_light = Sora({
   weight: "400",
 });
 
+export const sora_l = Sora({
+  subsets: ["latin"],
+  weight: "300",
+});
+
 export const sora_d = Sora({
   subsets: ["latin"],
   weight: "600",
@@ -56,7 +61,7 @@ export default async function RootLayout({
   // const headersList = headers();
   // const pathname = headersList.get("next-url");
   // console.log(pathname);
-  console.log('children', children);
+  // console.log('children', children);
   return (
     <html lang="en">
       <body className="my-[2rem] space-y-[5rem]">

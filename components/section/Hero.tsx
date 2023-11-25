@@ -48,9 +48,9 @@ const Hero = ({ data }: { data: HeroSecData }) => {
         <div>
           <Link href="/shop">
             <Button
-              className={`bg-black py-[2rem] sm:text-left text-md ${sora_d.className} font-bold lg:max-w-[150px] tracking-wider space-x-3`}
+              className={`bg-black py-[2rem] sm:text-left text-md ${sora_d.className} font-bold lg:max-w-[150px] tracking-wider space-x-3 leading-tight`}
             >
-              <ShoppingCart className="h-6 w-6" />
+              <ShoppingCart className="h-7 w-7" />
               <p className="text-center">Start Shopping</p>
             </Button>
           </Link>

@@ -5,6 +5,7 @@ import Link from "next/link";
 
 const ProductCard = ({ prop }: { prop: Product }) => {
   const { _rev, name, subCategory, main_image, price, size } = prop;
+  console.log(size, prop)
   return (
     <div className={`py-4 ${cabin.className}`}>
       <Link
