@@ -23,8 +23,8 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(handleCartReducer, {
     quantity: 1,
     cartItems: 0,
-    cartProducts: [],
-    total: 0,
+    cartProducts: [] ,
+    total: 0, 
   });
   return (
     <CartContext.Provider value={[state, dispatch]}>

@@ -43,11 +43,6 @@ export async function POST(req: NextRequest){
         const session = await stripe.checkout.sessions.create(params);
         console.log('session_id', session.id);
         console.log('session_url',session.url);
-        const orderInserted = await db.insert(orders).values({
-            payment_id: session.url,
-            product_id: productIds,
-            total: BigInt()
-        });
         return NextResponse.json({id: session.id});
     } catch(err){
         console.log(err);

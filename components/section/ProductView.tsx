@@ -124,13 +124,26 @@ export const ProductView = (product: Product) => {
             <Button
               className={`bg-black py-6  ${sora_d.className}`}
               onClick={() => {
-                product.quantity =
-                  product.quantity === undefined
-                    ? state.quantity
-                    : product.quantity + state.quantity;
+                if (product.quantity === undefined) product.quantity = 0;
+                if(product.subTotal === undefined) product.subTotal = 0;
+                
+                state.cartProducts = state.cartProducts.map((cp) => cp._rev === product._rev && cp.orderSize === searchParams.get("size") ? {
+                  ...cp,
+                  quantity: cp.quantity + state.quantity,
+                  subTotal: (cp.quantity + state.quantity) * cp.price
+                } : cp);
+
                 dispatch({
                   type: "ADD_TO_CART",
-                  payload: { items: state.quantity, product: product },
+                  payload: {
+                    items: state.quantity,
+                    product: {
+                      ...product,
+                      quantity: state.quantity,
+                      subTotal: product.price * state.quantity,
+                      orderSize: searchParams.get("size")!,
+                    },
+                  },
                 });
               }}
             >

@@ -14,7 +14,7 @@ export const orders = pgTable("orders", {
     id: serial("id").primaryKey(),
     product_id: varchar ("product_id").array().notNull(),
     total: bigint ("total", {mode: "bigint"}).notNull(),
-    payment_id: varchar("payment_id"),
+    payment_id: varchar("payment_id").unique().notNull(),
 });
 
 export const db = drizzle(sql);

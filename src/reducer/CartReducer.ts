@@ -1,9 +1,13 @@
 import { Product } from "@/app/utils/types";
 
+export type CartProduct = Product & {
+  orderSize: string;
+};
+
 export interface State {
   quantity: number;
   cartItems: number;
-  cartProducts: Product[];
+  cartProducts: CartProduct[];
   total: number;
 }
 
@@ -14,9 +18,10 @@ export type ActionType =
   | "DELETE_FROM_CART"
   | "CALCULATE_TOTAL"
   | "INCREASE_FROM_CART"
-  | "DECREASE_FROM_CART";
+  | "DECREASE_FROM_CART"
+  | "CLEAR_CART";
 
-export type ActionPayload = { items: number; product: Product };
+export type ActionPayload = { items: number; product: CartProduct, totalAmount?: number };
 
 export interface Action {
   type: ActionType;
@@ -42,20 +47,34 @@ export const handleCartReducer = (state: State, action: Action) => {
 
     case "DELETE_FROM_CART":
       const { payload } = action;
-      const { items, product } = payload!;
-      product.quantity = 0;
+      const { product } = payload!;
       return {
         ...state,
-        cartProducts: state.cartProducts.filter(
-          (prod: Product) => prod._rev !== product._rev
-        ),
         total: state.total - product.subTotal,
         cartItems: state.cartItems - product.quantity,
       };
 
     case "INCREASE_FROM_CART":
+      return {
+        ...state,
+        cartItems: state.cartItems + action.payload!.items!,
+        total: state.total + action.payload!.product.price,
+      };
 
     case "DECREASE_FROM_CART":
+      return {
+        ...state,
+        cartItems: action.payload!.items,
+        total: action.payload!.product.quantity > 1 ? state.total - action.payload!.product.price : state.total,
+      };
+
+    case "CLEAR_CART":
+      return {
+        ...state,
+        cartItems: 0,
+        cartProducts: [],
+        total: 0,
+      }
 
     default:
       throw Error("Action not defined: " + action.type);
@@ -66,22 +85,23 @@ const addToCart = (_state: State, _payload: ActionPayload) => {
   const { items, product } = _payload;
   const { cartItems, cartProducts, total } = _state;
   const productExistsInCart = cartProducts.some(
-    (prod: Product) => prod._rev === product._rev
+    (prod: CartProduct) =>
+      prod._rev === product._rev && prod.orderSize === product.orderSize
   );
 
-  product.subTotal =
-    product.subTotal === undefined ? 0 : product.quantity * product.price;
-
-  return productExistsInCart
-    ? {
-        ..._state,
-        cartItems: cartItems + items,
-        total: total + product.price * items,
-      }
-    : {
-        ..._state,
-        cartItems: cartItems + items,
-        cartProducts: [...cartProducts, product],
-        total: total + product.price * items,
-      };
+  if (productExistsInCart) {
+    return {
+      ..._state,
+      cartItems: cartItems + items!,
+      total: total + product.price * items!,
+    };
+  } else {
+    // console.log("order_quantity from reducer: ", product.quantity);
+    return {
+      ..._state,
+      cartItems: cartItems + items!,
+      cartProducts: [...cartProducts, product],
+      total: total + product.price * items!,
+    };
+  }
 };

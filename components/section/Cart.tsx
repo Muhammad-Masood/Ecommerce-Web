@@ -4,39 +4,69 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/providers/CartContext";
+import { CartProduct } from "@/reducer/CartReducer";
+import { sora_d, sora_light } from "@/app/layout";
 
-export default function CartView({ product }: { product: Product }) {
-
+export default function CartView({ product }: { product: CartProduct }) {
   const [state, dispatch] = useContext(CartContext);
-  console.log("product from Cart: ", product);
+  console.log("cart_products: ", state.cartProducts);
+  console.log("new_cart_item", state.cartItems);
 
   return (
     <div className="">
-      <div className="flex justify-center mt-6">
-        <Image
-          className="rounded-lg"
-          src={product.main_image.asset.url}
-          alt="product image"
-          width={189}
-          height={189}
-        ></Image>
-        <div className="mr-44 ml-7 space-y-3">
-          <span className="flex text-xl font-poppins tracking-wide w-96">
-            {product.name + ` ()`}
-            <button onClick={() => dispatch({type: "DELETE_FROM_CART", payload: {product: product, items: product.quantity}})}>
-              <Trash2 className="ml-24" />
-            </button>
-          </span>
-          <p className="text-gray-500 font-semibold">{product.subCategory.name}</p>
+      <div className="flex gap-[2rem] lg:flex-row flex-col">
+        <div>
+          <Image
+            className="rounded-lg"
+            src={product.main_image.asset.url}
+            alt="product image"
+            width={189}
+            height={189}
+          ></Image>
+        </div>
+
+        <div className={`space-y-4 ${sora_light.className}`}>
+          <p className="flex text-xl font-poppins tracking-wide justify-between items-center gap-x-3">
+            {product.name + ` (${product.orderSize})`}
+
+            <span className="w-6 h-6">
+              <Trash2
+                className="cursor-pointer"
+                onClick={() => {
+                  state.cartProducts.splice(state.cartProducts.indexOf(product), 1);
+                  dispatch({
+                    type: "DELETE_FROM_CART",
+                    payload: { product: product, items: product.quantity },
+                  })
+                }
+                }
+              />
+            </span>
+          </p>
+          <p className="text-gray-500 font-semibold">
+            {product.subCategory.name}
+          </p>
           <p className="font-semibold">Delivery Estimation</p>
           <p className="text-yellow-400 font-semibold text-base">
             5 Working Days
           </p>
-          <div className="flex">
+          <div className="flex items-center justify-between">
             <p className="text-xl font-semibold">${product.subTotal}</p>
-            <div className="flex gap-2 ml-56">
+            <div className="flex gap-2 ">
               <Button
-                onClick={() => dispatch({type: "DECREASE_FROM_CART"})}
+                onClick={() => {
+                  const updatedCartItems: number = product.quantity > 1 ? state.cartItems - 1 : state.cartItems;
+                  product.quantity = Math.max(product.quantity - 1, 1);
+                  product.subTotal = Math.max(product.price * product.quantity, product.price);
+                  dispatch({
+                    type: "DECREASE_FROM_CART",
+                    payload: {
+                      items: updatedCartItems,
+                      product: product,
+                      totalAmount: state.total - product.price,
+                    },
+                  });
+                }}
                 className="rounded-full"
               >
                 -
@@ -45,7 +75,14 @@ export default function CartView({ product }: { product: Product }) {
                 {product.quantity}
               </span>
               <Button
-                onClick={() => dispatch({type: "INCREASE_FROM_CART"})}
+                onClick={() => {
+                  product.quantity += 1;
+                  product.subTotal = product.price * product.quantity;
+                  dispatch({
+                    type: "INCREASE_FROM_CART",
+                    payload: { product: product, items: 1 },
+                  });
+                }}
                 className="rounded-full"
               >
                 +
