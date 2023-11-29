@@ -38,7 +38,7 @@ export const ProductView = (product: Product) => {
         <div className="flex gap-x-[2rem]">
           <div className="flex flex-col gap-y-[1rem] cursor-pointer">
             {images.slice(0, 2).map((image: PImage, index: number) => (
-              <React.Fragment>
+              <React.Fragment key={image.asset.url}>
                 {index === 0 && (
                   <Image
                     onClick={() => setCurrentMainImage(main_image.asset.url)}
@@ -62,7 +62,7 @@ export const ProductView = (product: Product) => {
             ))}
           </div>
 
-          <div className="lg:w-[80%] w-[85%] h-[100%]">
+          <div className="lg:w-[85%] w-[85%] h-[100%]">
             <Image
               className=""
               src={currentMainImage}
@@ -73,7 +73,7 @@ export const ProductView = (product: Product) => {
           </div>
         </div>
 
-        <div className="flex flex-col mt-16 ml-3">
+        <div className="flex flex-col mt-16">
           <h1 className={`my-1 font-poppins text-3xl ${sora_l.className}`}>
             {product.name}
           </h1>

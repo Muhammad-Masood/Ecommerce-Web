@@ -5,7 +5,6 @@ import { Product } from "../utils/types";
 
 const Shop = async () => {
   const products: Product[] = await fetchAllProducts();
-  console.log(products);
 
   if (products) {
     return (

@@ -64,9 +64,9 @@ export default async function RootLayout({
   // console.log('children', children);
   return (
     <html lang="en">
-      <body className="my-[2rem] space-y-[5rem]">
+      <body className="my-[2rem] space-y-[5rem]" suppressHydrationWarning={true}>
         <CartContextProvider>
-          <Navbar navLinks={categories} logo={logo} />
+          <Navbar navLinks={categories} logo={logo} key={logo.asset.url} />
           {children}
           <Footer />
         </CartContextProvider>

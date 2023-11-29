@@ -16,7 +16,7 @@ const NewArrivals = ({ data }: { data: Product[] }) => {
         </h2>
       </div>
       
-      <div className="flex flex-wrap gap-x-4 justify-center">
+      <div className="flex flex-wrap justify-center">
         {data.slice(0, 6).map((product) => (
           <ProductCard prop={product} key={product._rev} />
         ))}

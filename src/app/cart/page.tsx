@@ -12,35 +12,31 @@ import { sora_d, sora_l } from "../layout";
 // import { createCheckoutSession } from "./checkout";
 
 export default function Page() {
-  // const { cartProducts, cartItems, setCartItems, total } = useContext(CartContext);
   const [state, dispatch] = useContext(CartContext);
   const { cartItems, cartProducts, total } = state;
 
   const handleCheckout = async () => {
-    // const checkoutSession = await axios.post(
-    //   "/api/checkout_session",
-    //   cartProducts
-    // );
-    // if (checkoutSession.status == 500) {
-    //   console.log(checkoutSession.statusText);
-    //   return;
-    // }
+    try {
+      const productIds: string[] = cartProducts.map((item) => item._rev);
+      const checkoutSession = await axios.post(
+        "/api/checkout_session",
+        cartProducts
+      );
+      const { id } = checkoutSession.data;
 
-    // const stripe = await getStripe();
-    // const { error } = await stripe!.redirectToCheckout({
-    //   sessionId: checkoutSession.data.id,
-    // });
-    // console.warn(error);
-    const productIds: string[] = cartProducts.map((product) => product._rev);
-    console.log(productIds);
-    const orderInserted = await db.insert(orders).values({
-      payment_id: "id121212",
-      product_id: productIds,
-      total: BigInt(100000),
-  });
+      if (checkoutSession.status == 500) {
+        console.log(checkoutSession.statusText);
+        return;
+      }
+      const stripe = await getStripe();
+      await stripe!.redirectToCheckout({
+        sessionId: id,
+      });
+
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  console.log(total);
 
   return (
     <div className="main lg:p-10 px-10">

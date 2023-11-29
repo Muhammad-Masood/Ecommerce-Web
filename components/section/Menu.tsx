@@ -54,6 +54,7 @@ const Menu = ({  setHide,children }: MenuProps) => {
       </Link> */}
         </nav>
       ) : (
+        /* @ts-expect-error Async Server Component */
         <RootLayout>{children}</RootLayout>
       )}
     </div>
