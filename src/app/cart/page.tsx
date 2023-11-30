@@ -20,10 +20,9 @@ export default function Page() {
       const productIds: string[] = cartProducts.map((item) => item._rev);
       const checkoutSession = await axios.post(
         "/api/checkout_session",
-        cartProducts
+        {cartProducts, productIds, total}
       );
-      const { id } = checkoutSession.data;
-
+      const { id, session } = checkoutSession.data;
       if (checkoutSession.status == 500) {
         console.log(checkoutSession.statusText);
         return;

@@ -10,7 +10,6 @@ import Menu from "components/section/Menu";
 import { MenuProps } from "components/section/Menu";
 import { fetchCategories, fetchLogo } from "./data";
 import { PImage } from "./utils/types";
-// import {headers} from "next/headers";
 
 export const lato = Lato({
   subsets: ["latin"],

@@ -8,11 +8,18 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { cookies } from 'next/headers'
 
+interface CheckoutBodyParams {
+  cartProducts: CartProduct[];
+  productIds: string[];
+  total: number;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const body: CartProduct[] = await req.json(); // array of items
+    const body: CheckoutBodyParams = await req.json();
+    const { cartProducts, productIds, total } = body;
 
-    const line_items = body.map((item) => {
+    const line_items = cartProducts.map((item) => {
       return {
         price_data: {
           currency: "usd",
@@ -25,18 +32,18 @@ export async function POST(req: NextRequest) {
         quantity: item.quantity,
       };
     });
-
+    // const productIds: string[] = body.map((item) => item._rev);
     const params: Stripe.Checkout.SessionCreateParams = {
       mode: "payment",
       line_items,
       payment_method_types: ["card"],
-      success_url: `${req.nextUrl.origin}/successPay`,
+      success_url: `${req.nextUrl.origin}/successPay?productIds=${productIds}&total=${total}`,
       cancel_url: `${req.nextUrl.origin}/cart`,
     };
     const session = await stripe.checkout.sessions.create(params);
-    console.log("session_id", session.id);
-    cookies().set('session_id', session.id, {secure: true});
-    return NextResponse.json({ id: session.id });
+    console.log(session.id);
+    cookies().set('session_id', session.id, {httpOnly: true});
+    return NextResponse.json({ id: session.id, session: session });
   } catch (err) {
     console.log(err);
   }
