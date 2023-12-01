@@ -7,31 +7,28 @@ import { ShoppingBagIcon, Trash2 } from "lucide-react";
 import { Button } from "components/ui/button";
 import axios from "axios";
 import getStripe from "@/lib/stripe-load";
-import { db, orders } from "@/lib/drizzle";
 import { sora_d, sora_l } from "../layout";
-// import { createCheckoutSession } from "./checkout";
 
 export default function Page() {
   const [state, dispatch] = useContext(CartContext);
   const { cartItems, cartProducts, total } = state;
-
   const handleCheckout = async () => {
     try {
-      const productIds: string[] = cartProducts.map((item) => item._rev);
-      const checkoutSession = await axios.post(
-        "/api/checkout_session",
-        {cartProducts, productIds, total}
-      );
-      const { id, session } = checkoutSession.data;
-      if (checkoutSession.status == 500) {
-        console.log(checkoutSession.statusText);
-        return;
-      }
-      const stripe = await getStripe();
-      await stripe!.redirectToCheckout({
-        sessionId: id,
-      });
-
+        const productIds: string[] = cartProducts.map((item) => item._rev);
+        const checkoutSession = await axios.post("/api/checkout_session", {
+          cartProducts,
+          productIds,
+          total,
+        });
+        const { id, session } = checkoutSession.data;
+        if (checkoutSession.status == 500) {
+          console.log(checkoutSession.statusText);
+          return;
+        }
+        const stripe = await getStripe();
+        await stripe!.redirectToCheckout({
+          sessionId: id,
+        });
     } catch (error) {
       console.log(error);
     }

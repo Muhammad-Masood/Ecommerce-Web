@@ -3,13 +3,8 @@ import "./globals.css";
 import { Cabin, Cormorant, Inter, Lato, Sora } from "next/font/google";
 import Footer from "../../components/section/Footer";
 import { CartContextProvider } from "../providers/CartContext";
-import { useState } from "react";
-import Link from "next/link";
-import { MenuIcon } from "lucide-react";
-import Menu from "components/section/Menu"; 
-import { MenuProps } from "components/section/Menu";
 import { fetchCategories, fetchLogo } from "./data";
-import { PImage } from "./utils/types";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const lato = Lato({
   subsets: ["latin"],
@@ -57,19 +52,20 @@ export default async function RootLayout({
 }) {
   const categories = await fetchCategories();
   const { logo }: any = await fetchLogo();
-  // const headersList = headers();
-  // const pathname = headersList.get("next-url");
-  // console.log(pathname);
-  // console.log('children', children);
   return (
-    <html lang="en">
-      <body className="my-[2rem] space-y-[5rem]" suppressHydrationWarning={true}>
-        <CartContextProvider>
-          <Navbar navLinks={categories} logo={logo} key={logo.asset.url} />
-          {children}
-          <Footer />
-        </CartContextProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className="my-[2rem] space-y-[5rem]"
+          suppressHydrationWarning={true}
+        >
+          <CartContextProvider>
+            <Navbar navLinks={categories} logo={logo} key={logo.asset.url} />
+            {children}
+            <Footer />
+          </CartContextProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

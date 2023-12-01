@@ -40,7 +40,7 @@ const Hero = ({ data }: { data: HeroSecData }) => {
           An Industrial Take on Streetwear
         </p>
         <p
-          className={`mt-4  text-slate-700 dark:text-slate-400 ${sora_light.className}`}
+          className={`mt-4  text-slate-700 dark:text-slate-400 ${sora_light.className} lg:w-[70%]`}
         >
           Anyone can beat you but no one can beat your outfit as long as you
           wear Dine outfits.
@@ -55,8 +55,8 @@ const Hero = ({ data }: { data: HeroSecData }) => {
             </Button>
           </Link>
         </div>
-        <div className="flex flex-col flex-shrink  space-x-3 lg:flex-row space-y-2 opacity-50">
-          <Image src={Featured1} alt="Featured1"></Image>
+        <div className="flex flex-wrap space-x-5 lg:flex-row space-y-2 opacity-50">
+          <Image src={Featured1} alt="Featured1" className="pt-3"></Image>
           <Image src={Featured2} alt="Featured2"></Image>
           <Image src={Featured3} alt="Featured3"></Image>
           <Image src={Featured4} alt="Featured4"></Image>

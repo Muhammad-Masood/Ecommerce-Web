@@ -3,11 +3,10 @@ import { Product } from "@/app/utils/types";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 
-const ProductCard = ({ prop }: { prop: Product }) => {
+const ProductCard = ({ prop, width, height, hover }: { prop: Product, width: number, height: number, hover?:boolean }) => {
   const { _rev, name, subCategory, main_image, price, size } = prop;
-  console.log(size, prop)
   return (
-    <div className={`py-4 ${cabin.className}`}>
+    <div className={`py-4 ${cabin.className} ${hover?"hover:scale-105 duration-500":""}`}>
       <Link
         className=""
         href={`/products/${_rev}${
@@ -17,11 +16,11 @@ const ProductCard = ({ prop }: { prop: Product }) => {
         <Image
           src={main_image.asset.url}
           alt="product image"
-          width={250}
-          height={250}
-          className="w-auto h-auto"
+          width={width}
+          height={height}
+          className={`w-[${width}px] h-[${height}px]`}
         ></Image>
-        <div className="max-w-[250px]">
+        <div className={`max-w-[${width}px]`}>
           <p
             className={`font-poppins text-lg text-gray-900 mt-2 tracking-wide ${sora_d.className} whitespace-nowrap overflow-hidden overflow-ellipsis`}
           >

@@ -11,7 +11,7 @@ const Newsletter = () => {
       <p className={`text-center leading-7 mt-3 ${sora_light.className} opacity-90`}>
         Get the latest information and promo offers directly
       </p>
-      <p className={`absolute ${sora.className} text-[7.4rem] text-gray-200 opacity-40 -z-10`}>Newsletter</p>
+      <p className={`absolute ${sora.className} text-[4rem] lg:text-[7.4rem] text-gray-200 opacity-40 -z-10`}>Newsletter</p>
       <div className="flex w-full max-w-sm items-center space-x-2 mt-8 lg:px-0 px-[2rem] lg:flex-row flex-col space-y-4 lg:space-y-0">
         <Input
           className="border-black rounded-none w-full pr-10"

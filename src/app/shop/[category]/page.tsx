@@ -12,7 +12,7 @@ export default async function Page({
       <section className="text-gray-600 body-font main flex justify-center">
         <div className="grid sm: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-14">
           {filteredProducts.map((product) => (
-            <ProductCard key={product._rev} prop={product}></ProductCard>
+            <ProductCard key={product._rev} prop={product} width={250} height={270}/>
           ))}
         </div>
       </section>

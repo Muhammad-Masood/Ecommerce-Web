@@ -11,6 +11,7 @@ import { CartContext } from "../../src/providers/CartContext";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { sora, sora_d, sora_l, sora_light } from "@/app/layout";
 import { PlusCircle } from "lucide-react";
+import { SignInButton, useUser } from "@clerk/nextjs";
 
 export const ProductView = (product: Product) => {
   const {
@@ -31,10 +32,13 @@ export const ProductView = (product: Product) => {
   const searchParams = useSearchParams();
 
   const [state, dispatch] = useContext(CartContext);
+  const { user } = useUser();
+
+  console.log(pathName, router);
 
   return (
     <div className="bg-zinc-50 -mt-[2rem] lg:px-[8rem] lg:py-[4rem] p-[2rem]">
-      <div className="flex gap-x-3 lg:flex-row flex-col">
+      <div className="flex gap-x-6 lg:flex-row flex-col">
         <div className="flex gap-x-[2rem]">
           <div className="flex flex-col gap-y-[1rem] cursor-pointer">
             {images.slice(0, 2).map((image: PImage, index: number) => (
@@ -121,34 +125,48 @@ export const ProductView = (product: Product) => {
             </div>
           </div>
           <div className="flex gap-4 mt-3">
-            <Button
-              className={`bg-black py-6  ${sora_d.className}`}
-              onClick={() => {
-                if (product.quantity === undefined) product.quantity = 0;
-                if(product.subTotal === undefined) product.subTotal = 0;
-                
-                state.cartProducts = state.cartProducts.map((cp) => cp._rev === product._rev && cp.orderSize === searchParams.get("size") ? {
-                  ...cp,
-                  quantity: cp.quantity + state.quantity,
-                  subTotal: (cp.quantity + state.quantity) * cp.price
-                } : cp);
+            {user ? (
+              <Button
+                className={`bg-black py-6  ${sora_d.className}`}
+                onClick={() => {
+                  if (product.quantity === undefined) product.quantity = 0;
+                  if (product.subTotal === undefined) product.subTotal = 0;
 
-                dispatch({
-                  type: "ADD_TO_CART",
-                  payload: {
-                    items: state.quantity,
-                    product: {
-                      ...product,
-                      quantity: state.quantity,
-                      subTotal: product.price * state.quantity,
-                      orderSize: searchParams.get("size")!,
+                  state.cartProducts = state.cartProducts.map((cp) =>
+                    cp._rev === product._rev &&
+                    cp.orderSize === searchParams.get("size")
+                      ? {
+                          ...cp,
+                          quantity: cp.quantity + state.quantity,
+                          subTotal: (cp.quantity + state.quantity) * cp.price,
+                        }
+                      : cp
+                  );
+
+                  dispatch({
+                    type: "ADD_TO_CART",
+                    payload: {
+                      items: state.quantity,
+                      product: {
+                        ...product,
+                        quantity: state.quantity,
+                        subTotal: product.price * state.quantity,
+                        orderSize: searchParams.get("size")!,
+                      },
                     },
-                  },
-                });
-              }}
-            >
-              <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
-            </Button>
+                  });
+                }}
+              >
+                <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
+              </Button>
+            ) : (
+              <SignInButton mode="modal" afterSignInUrl={`${router.push(`/products/${product._rev}`)}`}>
+                <Button className={`bg-black py-6  ${sora_d.className}`}>
+                <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
+                </Button>
+              </SignInButton>
+            )}
+
             <div className="flex justify-center items-center text-2xl font-semibold font-poppins">
               <h1 className={`${sora.className}`}>
                 <b>$ {product.price}.00</b>

@@ -20,13 +20,13 @@ const page = () => {
       const { session_id } = data;
       const productIds = Array(searchParams.get("productIds")!);
       const total = searchParams.get('total');
-      const payment_status = await stripe.checkout.sessions.retrieve(
+      const session = await stripe.checkout.sessions.retrieve(
         session_id
       );
-      console.log(payment_status);
+      console.log(session);
       if (
-        payment_status.payment_status === "paid" &&
-        payment_status.payment_intent
+        session.payment_status === "paid" &&
+        session.payment_intent
       ) {
         setPaidStatus(true);
         const order = await axios.post("/api/db", {

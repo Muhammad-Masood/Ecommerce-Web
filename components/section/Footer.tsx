@@ -28,7 +28,7 @@ const Footer = () => {
             <Link href="/" className="bg-gray-200 rounded-lg p-2">
               <FacebookIcon />
             </Link>
-            <Link href="/" className="bg-gray-200 rounded-lg p-2">
+            <Link href="https://www.linkedin.com/in/muhammad-masood-b9a091248/" className="bg-gray-200 rounded-lg p-2">
               <LinkedinIcon />
             </Link>
           </div>
@@ -95,9 +95,10 @@ const Footer = () => {
         <p className="font-semibold text-gray-500 min-w-max">
           Copyright © 2023 Muhammad Masood
         </p>
-        <p className={`lg:w-40 min-w-max text-gray-500 ${sora_light.className}`}>
+        {/* <p className={`lg:w-40 min-w-max text-gray-500 ${sora_light.className}`}>
           Design by. <span className="font-bold text-black">Sameer Nadir</span>
-        </p>
+        </p> */}
+        <Link href="https://github.com/Muhammad-Masood">
         <p className={`lg:w-64 min-w-max text-gray-500 ${sora_light.className}`}>
           Code by.{" "}
           <span className="text-black font-bold">
@@ -105,6 +106,7 @@ const Footer = () => {
             Muhammad-Masood on github{" "}
           </span>
         </p>
+        </Link>
       </div>
     </footer>
   );
