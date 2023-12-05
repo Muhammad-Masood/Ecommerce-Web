@@ -1,10 +1,13 @@
-import Navbar from "../../components/section/Navbar";
-import "./globals.css";
+import Navbar from "components/section/Navbar";
+import "@/app/globals.css";
 import { Cabin, Cormorant, Inter, Lato, Sora } from "next/font/google";
-import Footer from "../../components/section/Footer";
-import { CartContextProvider } from "../providers/CartContext";
-import { fetchCategories, fetchLogo } from "./data";
-import { ClerkProvider } from "@clerk/nextjs";
+import Footer from "components/section/Footer";
+import { CartContextProvider } from "../../providers/CartContext";
+import { fetchCategories, fetchLogo } from "../data";
+import { ClerkProvider, auth } from "@clerk/nextjs";
+import { fetchCartItems, fetchCartProducts } from "./server";
+import axios from "axios";
+import { CartProduct } from "@/reducer/CartReducer";
 
 export const lato = Lato({
   subsets: ["latin"],
@@ -45,6 +48,27 @@ export const sora_d = Sora({
 //   },
 // };
 
+const fetchContextData: (_user_id:string|null) => Promise<{
+  cartItems: number;
+  cartProducts: CartProduct[],
+  total: number
+}> = async (_user_id:string|null) => {
+  if (_user_id === null) {
+    return {
+      cartItems: 0,
+      cartProducts: [],
+      total: 0,
+    };
+  } else {
+    const {cartProducts, total} = await fetchCartProducts(_user_id);
+    return {
+      cartItems: await fetchCartItems(_user_id),
+      cartProducts: cartProducts,
+      total: total,
+    };
+  }
+};
+
 export default async function RootLayout({
   children,
 }: {
@@ -52,6 +76,9 @@ export default async function RootLayout({
 }) {
   const categories = await fetchCategories();
   const { logo }: any = await fetchLogo();
+  const { userId } = auth();
+  const {cartItems, cartProducts, total} = await fetchContextData(userId);
+
   return (
     <ClerkProvider>
       <html lang="en">
@@ -59,7 +86,11 @@ export default async function RootLayout({
           className="my-[2rem] space-y-[5rem]"
           suppressHydrationWarning={true}
         >
-          <CartContextProvider>
+          <CartContextProvider
+            cart_items={cartItems !== null ? Number(cartItems) : 0}
+            cart_products={cartProducts}
+            _total={total}
+          >
             <Navbar navLinks={categories} logo={logo} key={logo.asset.url} />
             {children}
             <Footer />

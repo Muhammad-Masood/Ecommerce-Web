@@ -9,9 +9,10 @@ import pro from "../../public/project.png";
 import React, { useContext, useState } from "react";
 import { CartContext } from "../../src/providers/CartContext";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { sora, sora_d, sora_l, sora_light } from "@/app/layout";
+import { sora, sora_d, sora_l, sora_light } from "@/app/()/layout";
 import { PlusCircle } from "lucide-react";
 import { SignInButton, useUser } from "@clerk/nextjs";
+import axios from "axios";
 
 export const ProductView = (product: Product) => {
   const {
@@ -35,6 +36,7 @@ export const ProductView = (product: Product) => {
   const { user } = useUser();
 
   console.log(pathName, router);
+  console.log(user);
 
   return (
     <div className="bg-zinc-50 -mt-[2rem] lg:px-[8rem] lg:py-[4rem] p-[2rem]">
@@ -128,7 +130,7 @@ export const ProductView = (product: Product) => {
             {user ? (
               <Button
                 className={`bg-black py-6  ${sora_d.className}`}
-                onClick={() => {
+                onClick={async () => {
                   if (product.quantity === undefined) product.quantity = 0;
                   if (product.subTotal === undefined) product.subTotal = 0;
 
@@ -155,14 +157,24 @@ export const ProductView = (product: Product) => {
                       },
                     },
                   });
+                  const res = await axios.post("/api/db/cart", {
+                    product_id: product._rev,
+                    quantity: state.quantity,
+                    size: searchParams.get("size")!,
+                    userId: user.id,
+                  });
+                  console.log(res.data);
                 }}
               >
                 <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
               </Button>
             ) : (
-              <SignInButton mode="modal" afterSignInUrl={`${router.push(`/products/${product._rev}`)}`}>
+              <SignInButton
+                mode="modal"
+                afterSignInUrl={`${router.push(`/products/${product._rev}`)}`}
+              >
                 <Button className={`bg-black py-6  ${sora_d.className}`}>
-                <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
+                  <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
                 </Button>
               </SignInButton>
             )}

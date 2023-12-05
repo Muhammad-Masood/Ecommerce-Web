@@ -1,6 +1,5 @@
-import { ProductView } from "../../../../components/section/ProductView";
+import { ProductView } from "components/section/ProductView"; 
 import { Product } from "@/app/utils/types";
-import ProductCard from "../../../../components/section/ProductCard";
 import { fetchProductByID } from "@/app/data";
 
 export default async function Page({ params }: { params: { id: string } }) {

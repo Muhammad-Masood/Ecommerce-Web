@@ -1,4 +1,4 @@
-import { sora_light } from "@/app/layout";
+import { sora_light } from "@/app/()/layout";
 import {
   FacebookIcon,
   LinkedinIcon,
@@ -28,7 +28,10 @@ const Footer = () => {
             <Link href="/" className="bg-gray-200 rounded-lg p-2">
               <FacebookIcon />
             </Link>
-            <Link href="https://www.linkedin.com/in/muhammad-masood-b9a091248/" className="bg-gray-200 rounded-lg p-2">
+            <Link
+              href="https://www.linkedin.com/in/muhammad-masood-b9a091248/"
+              className="bg-gray-200 rounded-lg p-2"
+            >
               <LinkedinIcon />
             </Link>
           </div>
@@ -99,13 +102,15 @@ const Footer = () => {
           Design by. <span className="font-bold text-black">Sameer Nadir</span>
         </p> */}
         <Link href="https://github.com/Muhammad-Masood">
-        <p className={`lg:w-64 min-w-max text-gray-500 ${sora_light.className}`}>
-          Code by.{" "}
-          <span className="text-black font-bold">
-            {" "}
-            Muhammad-Masood on github{" "}
-          </span>
-        </p>
+          <p
+            className={`lg:w-64 min-w-max text-gray-500 ${sora_light.className}`}
+          >
+            Code by.{" "}
+            <span className="text-black font-bold">
+              {" "}
+              Muhammad-Masood on github{" "}
+            </span>
+          </p>
         </Link>
       </div>
     </footer>

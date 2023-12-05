@@ -5,7 +5,8 @@ import { Button } from "../ui/button";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/providers/CartContext";
 import { CartProduct } from "@/reducer/CartReducer";
-import { sora_d, sora_light } from "@/app/layout";
+import { sora_d, sora_light } from "@/app/()/layout";
+import axios from "axios";
 
 export default function CartView({ product }: { product: CartProduct }) {
   const [state, dispatch] = useContext(CartContext);
@@ -33,13 +34,15 @@ export default function CartView({ product }: { product: CartProduct }) {
               <Trash2
                 className="cursor-pointer"
                 onClick={() => {
-                  state.cartProducts.splice(state.cartProducts.indexOf(product), 1);
+                  state.cartProducts.splice(
+                    state.cartProducts.indexOf(product),
+                    1
+                  );
                   dispatch({
                     type: "DELETE_FROM_CART",
                     payload: { product: product, items: product.quantity },
-                  })
-                }
-                }
+                  });
+                }}
               />
             </span>
           </p>
@@ -54,18 +57,27 @@ export default function CartView({ product }: { product: CartProduct }) {
             <p className="text-xl font-semibold">${product.subTotal}</p>
             <div className="flex gap-2 ">
               <Button
-                onClick={() => {
-                  const updatedCartItems: number = product.quantity > 1 ? state.cartItems - 1 : state.cartItems;
+                onClick={async () => {
+                  const updatedCartItems: number =
+                    product.quantity > 1
+                      ? state.cartItems - 1
+                      : state.cartItems;
+                  const prevTotal = state.total;
+                  const total =
+                    product.quantity > 1
+                      ? prevTotal - product.price
+                      : prevTotal;
                   product.quantity = Math.max(product.quantity - 1, 1);
-                  product.subTotal = Math.max(product.price * product.quantity, product.price);
+                  product.subTotal = product.price * product.quantity;
                   dispatch({
                     type: "DECREASE_FROM_CART",
                     payload: {
                       items: updatedCartItems,
                       product: product,
-                      totalAmount: state.total - product.price,
+                      totalAmount: total,
                     },
                   });
+                  await axios.patch('api/db/cart/cartProducts', {quantity: product.quantity, id: product._rev});
                 }}
                 className="rounded-full"
               >
@@ -75,13 +87,14 @@ export default function CartView({ product }: { product: CartProduct }) {
                 {product.quantity}
               </span>
               <Button
-                onClick={() => {
+                onClick={async () => {
                   product.quantity += 1;
                   product.subTotal = product.price * product.quantity;
                   dispatch({
                     type: "INCREASE_FROM_CART",
                     payload: { product: product, items: 1 },
                   });
+                  await axios.patch('api/db/cart/cartProducts', {quantity: product.quantity, id: product._rev});
                 }}
                 className="rounded-full"
               >

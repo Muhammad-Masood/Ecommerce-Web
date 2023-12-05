@@ -4,11 +4,11 @@ import Image from "next/image";
 import { Product } from "@/app/utils/types";
 import ProductCard from "./ProductCard";
 import { Cinzel, Cinzel_Decorative, Lato, Sora } from "next/font/google";
-import { lato, sora_light } from "@/app/layout";
+import { lato, sora_light } from "@/app/()/layout";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import 'swiper/css/effect-coverflow';
-import { EffectCoverflow } from 'swiper/modules';
+import "swiper/css/effect-coverflow";
+import { EffectCoverflow } from "swiper/modules";
 
 const NewArrivals = ({ data }: { data: Product[] }) => {
   return (
@@ -49,7 +49,7 @@ const NewArrivals = ({ data }: { data: Product[] }) => {
         effect="coverflow"
       >
         {data.slice(0, 6).map((product) => (
-          <SwiperSlide key={product._rev} >
+          <SwiperSlide key={product._rev}>
             <ProductCard
               prop={product}
               width={345}

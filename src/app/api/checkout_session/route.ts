@@ -1,4 +1,3 @@
-import { db, orders } from "@/lib/drizzle";
 import stripe from "@/lib/utils";
 import { CartProduct } from "@/reducer/CartReducer";
 import { loadStripe } from "@stripe/stripe-js";
@@ -10,7 +9,7 @@ import { cookies } from 'next/headers'
 
 interface CheckoutBodyParams {
   cartProducts: CartProduct[];
-  productIds: string[];
+  productIds: string[]; 
   total: number;
 }
 
@@ -18,7 +17,7 @@ export async function POST(req: NextRequest) {
   try {
     const body: CheckoutBodyParams = await req.json();
     const { cartProducts, productIds, total } = body;
-
+    const sizes: string[] = cartProducts.map((product) => product.orderSize? product.orderSize : '');
     const line_items = cartProducts.map((item) => {
       return {
         price_data: {
@@ -32,18 +31,17 @@ export async function POST(req: NextRequest) {
         quantity: item.quantity,
       };
     });
-    // const productIds: string[] = body.map((item) => item._rev);
     const params: Stripe.Checkout.SessionCreateParams = {
       mode: "payment",
       line_items,
       payment_method_types: ["card"],
-      success_url: `${req.nextUrl.origin}/successPay?productIds=${productIds}&total=${total}`,
+      success_url: `${req.nextUrl.origin}/successPay?productIds=${productIds}&sizes=${sizes}`,
       cancel_url: `${req.nextUrl.origin}/cart`,
     };
     const session = await stripe.checkout.sessions.create(params);
     console.log(session.id);
     cookies().set('session_id', session.id, {httpOnly: true});
-    return NextResponse.json({ id: session.id, session: session });
+    return NextResponse.json({ session: session });
   } catch (err) {
     console.log(err);
   }

@@ -1,12 +1,26 @@
-import { cabin, lato, sora, sora_d } from "@/app/layout";
+import { cabin, lato, sora, sora_d } from "@/app/()/layout";
 import { Product } from "@/app/utils/types";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 
-const ProductCard = ({ prop, width, height, hover }: { prop: Product, width: number, height: number, hover?:boolean }) => {
+const ProductCard = ({
+  prop,
+  width,
+  height,
+  hover,
+}: {
+  prop: Product;
+  width: number;
+  height: number;
+  hover?: boolean;
+}) => {
   const { _rev, name, subCategory, main_image, price, size } = prop;
   return (
-    <div className={`py-4 ${cabin.className} ${hover?"hover:scale-105 duration-500":""}`}>
+    <div
+      className={`py-4 ${cabin.className} ${
+        hover ? "hover:scale-105 duration-500" : ""
+      }`}
+    >
       <Link
         className=""
         href={`/products/${_rev}${

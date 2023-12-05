@@ -1,21 +1,17 @@
-import Hero from "../../components/section/Hero";
-import Footer from "../../components/section/Footer";
-import Newsletter from "../../components/section/newsletter";
-import Promotions from "../../components/section/NewArrivals";
-import Desc from "../../components/section/desc";
-import { HeroSecData, PImage, Product } from "./utils/types";
+import Hero from "components/section/Hero";
+import Newsletter from "components/section/newsletter";
+import Desc from "components/section/desc";
+import { HeroSecData, PImage, Product } from "../utils/types";
 import {
-  fetchCategories,
   fetchFeaturedData,
   fetchFeaturedProducts,
   fetchHeroSecData,
-  fetchLogo,
   fetchNewArrivalsData,
-} from "./data";
+} from "../data";
 import Featured from "components/section/Featured";
-import NewArrivals from "../../components/section/NewArrivals";
-import { CartContextProvider } from "@/providers/CartContext";
-import Navbar from "components/section/Navbar";
+import NewArrivals from "components/section/NewArrivals";
+import axios from "axios";
+import { fetchCartItems } from "./server";
 
 export default async function Home() {
   const featuredProducts: Product[] = await fetchFeaturedProducts();

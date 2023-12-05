@@ -1,6 +1,8 @@
 "use client";
+import { fetchCartItems } from "@/app/()/server";
 import { Product } from "@/app/utils/types";
-import { Action, State, handleCartReducer } from "@/reducer/CartReducer";
+import { Action, CartProduct, State, handleCartReducer } from "@/reducer/CartReducer";
+import axios from "axios";
 import {
   Dispatch,
   ReactNode,
@@ -19,12 +21,12 @@ export const CartContext = createContext<[State, Dispatch<Action>]>([
   () => {},
 ]);
 
-export const CartContextProvider = ({ children }: { children: ReactNode }) => {
+export const CartContextProvider = ({ children, cart_items, cart_products, _total }: { children: ReactNode, cart_items: number, cart_products: CartProduct[], _total:number }) => {
   const [state, dispatch] = useReducer(handleCartReducer, {
     quantity: 1,
-    cartItems: 0,
-    cartProducts: [] ,
-    total: 0, 
+    cartItems: cart_items,
+    cartProducts: cart_products,
+    total: _total, 
   });
   return (
     <CartContext.Provider value={[state, dispatch]}>

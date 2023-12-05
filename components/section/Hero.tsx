@@ -10,7 +10,7 @@ import { HeroSecData } from "@/app/utils/types";
 import { Badge } from "components/ui/badge";
 import { Lato, Roboto, Sora } from "next/font/google";
 import "@/app/globals.css";
-import { cabin, sora, sora_d, lato, sora_light } from "@/app/layout";
+import { cabin, sora, sora_d, lato, sora_light } from "@/app/()/layout";
 
 // const lato = Lato({
 //   subsets: ["latin"],
@@ -25,9 +25,7 @@ const lato_light = Lato({
 const Hero = ({ data }: { data: HeroSecData }) => {
   return (
     <main className="flex justify-between lg:flex-row sm:flex-col">
-      <div
-        className={`lg:mt-8 sm:mt-3 space-y-9 flex flex-col items-start`}
-      >
+      <div className={`lg:mt-8 sm:mt-3 space-y-9 flex flex-col items-start`}>
         <Badge
           variant={"default"}
           className={`cursor-text bg-blue-100 text-blue-700 h-[40px] w-[120px] rounded-lg ${sora_d.className}  text-md flex items-center justify-center font-bold`}

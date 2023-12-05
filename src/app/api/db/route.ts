@@ -1,24 +1,31 @@
-import { db, orders } from "@/lib/drizzle";
+import { db, Orders, CartProducts, Cart } from "@/lib/drizzle";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 interface OrdersBodyProps {
   session_id: string;
   productIds: string[];
-  total: number;
+  sizes: string[];
 }
 export async function POST(request: NextRequest) {
   try {
     const body: OrdersBodyProps = await request.json();
-    const { session_id, productIds, total } = body;
+    const { session_id, productIds, sizes } = body;
+    
+    
+    const insertProduct = await db.insert(Products).values({
+      image: 
+    })
+    const insertOrder = await db.insert(Orders).values({
+      order_id: session_id,
+      status: "pending",
+    });
     cookies().delete("session_id");
-    console.log("cookies_deleted!");
-    console.log(productIds);
-    console.log(total);
     const orderInserted = await db.insert(orders).values({
-      payment_id: session_id,
+      order_id: session_id,
       product_id: productIds,
-      total: BigInt(total),
+      status: "pending",
+      sizes: sizes
     });
     console.log(orderInserted);
     return NextResponse.json({ order_data: orderInserted });
@@ -28,14 +35,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
-  try {
-    const getSessionId = cookies().get("session_id");
-    return NextResponse.json(
-      { session_id: getSessionId!.value },
-      { status: 200 }
-    );
-  } catch (error) {
-    return NextResponse.error();
-  }
-}
+

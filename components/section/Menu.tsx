@@ -1,9 +1,13 @@
-import React, { useState, ReactNode, useContext } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import RootLayout from '@/app/layout';
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from '@radix-ui/react-navigation-menu';
-import { Search, ShoppingCart, XSquare } from 'lucide-react';
+import React, { useState, ReactNode, useContext } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import RootLayout from "@/app/()/layout";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+} from "@radix-ui/react-navigation-menu";
+import { Search, ShoppingCart, XSquare } from "lucide-react";
 // import { contextProduct, contextVal } from "./CartContext";
 
 export interface MenuProps {
@@ -11,23 +15,28 @@ export interface MenuProps {
   children: ReactNode;
 }
 
-const Menu = ({  setHide,children }: MenuProps) => {
+const Menu = ({ setHide, children }: MenuProps) => {
   const [show, setShow] = useState(true);
   // const {cartItems} = useContext(contextVal);
 
   return (
-    <div className='p-5 '>
+    <div className="p-5 ">
       {show ? (
-        <nav >
+        <nav>
           <div className="flex justify-between ">
             <Link href="/">
-              <Image src="/Logo.webp" alt="website logo" width={150} height={150} />
+              <Image
+                src="/Logo.webp"
+                alt="website logo"
+                width={150}
+                height={150}
+              />
             </Link>
             <XSquare onClick={() => setHide(false)} />
           </div>
-          <div className='mt-[100px]'>
+          <div className="mt-[100px]">
             <NavigationMenu>
-              <NavigationMenuList >
+              <NavigationMenuList>
                 <NavigationMenuItem className="space-x-12 text-lg">
                   <Link href="/allprod/kids">Kids</Link>
                   <Link href="/allprod/boys">Boys</Link>

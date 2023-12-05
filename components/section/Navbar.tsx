@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "components/ui/button";
 import { useRouter } from "next/navigation";
-import { sora, sora_l, sora_light } from "@/app/layout";
+import { sora, sora_l, sora_light } from "@/app/()/layout";
 import {
   SignInButton,
   SignOutButton,
@@ -32,8 +32,15 @@ import {
   UserButton,
   useUser,
 } from "@clerk/nextjs";
+import axios from "axios";
 
-const Navbar = ({ navLinks, logo }: { navLinks: Category[]; logo: PImage }) => {
+const Navbar = ({
+  navLinks,
+  logo,
+}: {
+  navLinks: Category[];
+  logo: PImage;
+}) => {
   // const { cartItems } = useContext(CartContext);
   const router = useRouter();
   const [state, dispatch] = useContext(CartContext);
@@ -104,7 +111,7 @@ const Navbar = ({ navLinks, logo }: { navLinks: Category[]; logo: PImage }) => {
         </SignInButton>
       )}
 
-      <div className="lg:hidden">
+      {/* <div className="lg:hidden">
         <Sheet open={isOpen}>
           <SheetTrigger onClick={() => setIsOpen(true)}>
             <Menu />
@@ -141,7 +148,7 @@ const Navbar = ({ navLinks, logo }: { navLinks: Category[]; logo: PImage }) => {
             </SheetHeader>
           </SheetContent>
         </Sheet>
-      </div>
+      </div> */}
     </div>
   );
 };

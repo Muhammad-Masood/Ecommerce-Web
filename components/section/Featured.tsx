@@ -3,7 +3,7 @@ import Image from "next/image";
 import ProductCard from "./ProductCard";
 import { fetchFeaturedProducts } from "@/app/data";
 import { FeaturedData, Product } from "@/app/utils/types";
-import { sora_d } from "@/app/layout";
+import { sora_d } from "@/app/()/layout";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 

@@ -14,7 +14,7 @@ import {
 ////////////////////
 
 export const fetchLogo = async () => {
-  const logo:PImage = await client.fetch({
+  const logo: PImage = await client.fetch({
     query: `*[_type == "logo"]{
       logo {asset -> {url}}
     }[0]`,
@@ -186,4 +186,24 @@ export const fetchCategoryById = async (_id: string) => {
     `,
   });
   return category;
+};
+
+/////// ADMIN ///////
+////////////////////
+
+export type MAIN_IMAGE = {
+  main_image: {
+    asset: {
+      url: string;
+    };
+  };
+};
+
+export const fetchMainImage = async (_rev: string) => {
+  const image: MAIN_IMAGE[] = await client.fetch({
+    query: `*[_type == "product" && _rev == "${_rev}"]{
+      main_image {asset-> {url}},
+    }`,
+  });
+  return image[0];
 };

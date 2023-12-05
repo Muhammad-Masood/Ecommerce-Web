@@ -65,7 +65,8 @@ export const handleCartReducer = (state: State, action: Action) => {
       return {
         ...state,
         cartItems: action.payload!.items,
-        total: action.payload!.product.quantity > 1 ? state.total - action.payload!.product.price : state.total,
+        // total: action.payload!.product.quantity > 1 ? state.total - action.payload!.product.price : state.total,
+        total: action.payload!.totalAmount!,
       };
 
     case "CLEAR_CART":
@@ -96,7 +97,6 @@ const addToCart = (_state: State, _payload: ActionPayload) => {
       total: total + product.price * items!,
     };
   } else {
-    // console.log("order_quantity from reducer: ", product.quantity);
     return {
       ..._state,
       cartItems: cartItems + items!,

@@ -1,34 +1,38 @@
 "use client";
-import CartView from "../../../components/section/Cart";
-import { Product } from "../utils/types";
-import { CartContext } from "../../providers/CartContext";
-import { useContext, useState } from "react";
+import CartView from "components/section/Cart";
+import { CartContext } from "../../../providers/CartContext";
+import { useContext, useEffect, useState } from "react";
 import { ShoppingBagIcon, Trash2 } from "lucide-react";
 import { Button } from "components/ui/button";
 import axios from "axios";
 import getStripe from "@/lib/stripe-load";
 import { sora_d, sora_l } from "../layout";
+import { useUser } from "@clerk/nextjs";
 
 export default function Page() {
   const [state, dispatch] = useContext(CartContext);
   const { cartItems, cartProducts, total } = state;
+  const { user } = useUser();
+
+
   const handleCheckout = async () => {
     try {
-        const productIds: string[] = cartProducts.map((item) => item._rev);
-        const checkoutSession = await axios.post("/api/checkout_session", {
-          cartProducts,
-          productIds,
-          total,
-        });
-        const { id, session } = checkoutSession.data;
-        if (checkoutSession.status == 500) {
-          console.log(checkoutSession.statusText);
-          return;
-        }
-        const stripe = await getStripe();
-        await stripe!.redirectToCheckout({
-          sessionId: id,
-        });
+      const productIds: string[] = cartProducts.map((item) => item._rev);
+      const checkoutSession = await axios.post("/api/checkout_session", {
+        cartProducts,
+        productIds,
+        total,
+      });
+      const { session } = checkoutSession.data;
+      if (checkoutSession.status == 500) {
+        console.log(checkoutSession.statusText);
+        return;
+      }
+      console.log(session);
+      const stripe = await getStripe();
+      await stripe!.redirectToCheckout({
+        sessionId: session.id,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +48,10 @@ export default function Page() {
           {state.cartProducts.length > 0 && (
             <span
               className="cursor-pointer"
-              onClick={() => dispatch({ type: "CLEAR_CART" })}
+              onClick={async () => {
+                dispatch({ type: "CLEAR_CART" })
+                await axios.delete('/api/db/cart/cartProducts');
+              }}
             >
               <Trash2 />
             </span>
