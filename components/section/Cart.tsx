@@ -1,4 +1,3 @@
-import { Product } from "@/app/utils/types";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "../ui/button";
@@ -7,6 +6,7 @@ import { CartContext } from "@/providers/CartContext";
 import { CartProduct } from "@/reducer/CartReducer";
 import { sora_d, sora_light } from "@/app/()/layout";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function CartView({ product }: { product: CartProduct }) {
   const [state, dispatch] = useContext(CartContext);
@@ -32,6 +32,7 @@ export default function CartView({ product }: { product: CartProduct }) {
               <Trash2
                 className="cursor-pointer"
                 onClick={async () => {
+                  toast.success("Product removed");
                   state.cartProducts.splice(
                     state.cartProducts.indexOf(product),
                     1

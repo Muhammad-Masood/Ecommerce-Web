@@ -14,6 +14,7 @@ import { PlusCircle } from "lucide-react";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { CartProduct } from "@/reducer/CartReducer";
+import toast from "react-hot-toast";
 
 export const ProductView = (product: Product) => {
   const {
@@ -132,6 +133,7 @@ export const ProductView = (product: Product) => {
                   if (product.quantity === undefined) product.quantity = 0;
                   if (product.subTotal === undefined) product.subTotal = 0;
                   let cartProductExist: CartProduct;
+                  toast.success("Added to cart");
                   state.cartProducts = state.cartProducts.map((cp) => {
                     if(cp._rev === product._rev && cp.orderSize === searchParams.get("size")){
                       cartProductExist = {
@@ -172,7 +174,7 @@ export const ProductView = (product: Product) => {
             ) : (
               <SignInButton
                 mode="modal"
-                afterSignInUrl={`${router.push(`/products/${product._rev}`)}`}
+                afterSignInUrl={`${router.push(`/shop`)}`}
               >
                 <Button className={`bg-black py-6  ${sora_d.className}`}>
                   <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart

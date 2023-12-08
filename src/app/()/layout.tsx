@@ -6,7 +6,7 @@ import { CartContextProvider } from "../../providers/CartContext";
 import { fetchCategories, fetchLogo } from "../data";
 import { ClerkProvider, auth } from "@clerk/nextjs";
 import { fetchCartItems, fetchCartProducts } from "./server";
-import axios from "axios";
+import { Toaster } from "react-hot-toast";
 import { CartProduct } from "@/reducer/CartReducer";
 
 export const lato = Lato({
@@ -92,6 +92,7 @@ export default async function RootLayout({
             _total={total}
           >
             <Navbar navLinks={categories} logo={logo} key={logo.asset.url} />
+            <Toaster position="top-center"/>
             {children}
             <Footer />
           </CartContextProvider>

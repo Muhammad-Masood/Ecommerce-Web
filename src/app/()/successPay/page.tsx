@@ -33,10 +33,6 @@ const Page = () => {
     }
     insertOrder();
   }, []);
-  // } else {
-  //   console.log("redirecting");
-  //   // redirect("/");
-  // }
 
   return (
     <div>

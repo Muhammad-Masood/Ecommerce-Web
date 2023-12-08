@@ -8,6 +8,7 @@ import axios from "axios";
 import getStripe from "@/lib/stripe-load";
 import { sora_d, sora_l } from "../layout";
 import { useUser } from "@clerk/nextjs";
+import toast from "react-hot-toast";
 
 export default function Page() {
   const [state, dispatch] = useContext(CartContext);
@@ -17,6 +18,7 @@ export default function Page() {
 
   const handleCheckout = async () => {
     try {
+      toast.loading("Processing, Please wait...");
       const productIds: string[] = cartProducts.map((item) => item._rev);
       const checkoutSession = await axios.post("/api/checkout_session", {
         cartProducts,
@@ -49,6 +51,7 @@ export default function Page() {
             <span
               className="cursor-pointer"
               onClick={async () => {
+                toast.success("Cart emptied");
                 dispatch({ type: "CLEAR_CART" })
                 await axios.delete('/api/db/cart');
               }}
