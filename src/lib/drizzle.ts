@@ -38,18 +38,14 @@ export const Cart = pgTable(
 export const Orders = pgTable(
   "orders",
   {
-    id: varchar("id", { length: 255 }).primaryKey(),
-    cart_id: integer("cart_id"),
-    status: varchar("status", { length: 255 }).notNull(),
+    id: serial("id").primaryKey(),
+    payment_id: varchar("payment_id", { length: 255 }).unique().notNull(),
+    status: varchar("status", { length: 255 }).unique().notNull(),
+    product_id: varchar("product_id", { length: 255 }).notNull(),
+    size: varchar("size", { length: 6 }).notNull(),
+    user_id: varchar("user_id", { length: 255 }).notNull(),
+    quantity: integer("quantity").notNull(),
   },
-  (orders) => {
-    return {
-      cartReference: foreignKey({
-        columns: [orders.cart_id],
-        foreignColumns: [Cart.id],
-      }),
-    };
-  }
 );
 
 export const db = drizzle(sql);

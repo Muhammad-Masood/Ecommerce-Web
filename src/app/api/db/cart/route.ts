@@ -1,10 +1,10 @@
+import { fetchCartProductId } from "@/app/()/server";
 import { fetchProductByID } from "@/app/data";
 import { PImage } from "@/app/utils/types";
 import { Cart, CartProducts, db } from "@/lib/drizzle";
 import { CartProduct } from "@/reducer/CartReducer";
 import { auth } from "@clerk/nextjs";
-import { sql } from "@vercel/postgres";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 interface CartBodyProps {
@@ -12,89 +12,54 @@ interface CartBodyProps {
   quantity: number;
   size: string;
   userId: string;
+  cartProductExist: CartProduct
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body: CartBodyProps = await request.json();
-    const { product_id, quantity, size, userId } = body;
-    const productExistsInCart = await db.select().from(CartProducts).where(and(eq(CartProducts.product_id, product_id), eq(CartProducts.size, size), eq(CartProducts.user_id, userId)));
-    if(productExistsInCart){
+    const { product_id, quantity, size, userId, cartProductExist } = body;
+    if (cartProductExist) {
+      console.log("product_exists_in_cart");
       const updatedCartProduct = await db.update(CartProducts).set({
         quantity: quantity,
         size: size,
+      }).where(and(eq(CartProducts.product_id, product_id), eq(CartProducts.user_id, userId)));
+      return NextResponse.json({
+        cart_product_inserted: updatedCartProduct,
+        message: "Cart product updated",
       });
-      return NextResponse.json({ cart_product_inserted: updatedCartProduct, message: "Cart product updated" });
     } else {
-      const insertedCartProduct = await db.insert(CartProducts).values({
-      product_id: product_id,
-      size: size,
-      quantity: quantity,
-      user_id: userId,
-    });
-    const insertCartResult = await db.insert(Cart).values({
-      cart_product_id: ,
-    });
-    return NextResponse.json({ cart_product_inserted: insertCartResult });
-  } 
+      const insertedCartProduct = await db
+        .insert(CartProducts)
+        .values({
+          product_id: product_id,
+          size: size,
+          quantity: quantity,
+          user_id: userId,
+        })
+        .returning({ id: CartProducts.id });
+        console.log(insertedCartProduct);
+      const insertCartResult = await db.insert(Cart).values({
+        cart_product_id: insertedCartProduct[0].id,
+      });
+      return NextResponse.json({ cart_product_inserted: insertedCartProduct });
+    }
   } catch (error) {
-    console.log(error);
+    return NextResponse.json({error: error});
   }
 }
 
-// export const getConnectedUser = () => {
-//   return new Promise<string|null>((resolve, reject) => {
-//     auth()
-//       .getToken()
-//       .then((token) => {
-//         if (token) {
-//           resolve(auth().userId);
-//         }
-//       })
-//       .catch((error) => reject(error));
-//   });
-// };
-
-// export async function GET() {
-//   try {
-//     const userId:string|null = await getConnectedUser();
-//     if (userId) {
-//       const getCartProductsIds = await db
-//         .select({ product_id: Cart.cart_product_id })
-//         .from(Cart)
-//         .where(eq(Cart.user_id, userId));
-//       const cartProductsPromise: Promise<CartProduct>[] = getCartProductsIds
-//         ? getCartProductsIds.map(async (product) => {
-//             const productsData1 = await fetchProductByID(product.product_id!);
-//             console.log(productsData1);
-//             const productsData2 = await db
-//               .select({
-//                 quantity: CartProducts.quantity,
-//                 size: CartProducts.size,
-//               })
-//               .from(CartProducts)
-//               .innerJoin(Cart, eq(CartProducts.id, Cart.cart_product_id))
-//               .where(
-//                 and(
-//                   eq(Cart.user_id, userId),
-//                   eq(CartProducts.id, product.product_id!)
-//                 )
-//               );
-//             console.log(productsData2);
-
-//             return {
-//               ...productsData1,
-//               quantity: productsData2[0].quantity,
-//               orderSize: productsData2[0].size,
-//             };
-//           })
-//         : [];
-//       const cartProducts = await Promise.all(cartProductsPromise);
-//       return NextResponse.json({ cart_products: cartProducts });
-//     } else {
-//       return NextResponse.json({ cart_products: [] });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+export async function DELETE() {
+  try {
+    const { userId } = auth();
+    await db.execute(sql`DELETE FROM cart USING cartproducts where cart.cart_product_id = cartproducts.id
+    and cartproducts.user_id = ${userId}`);
+    const deleteCartProducts = await db
+      .delete(CartProducts)
+      .where(eq(CartProducts.user_id, userId!));
+    return NextResponse.json({ message: deleteCartProducts });
+  } catch (error) {
+    return NextResponse.json({error: error});
+  }
+}

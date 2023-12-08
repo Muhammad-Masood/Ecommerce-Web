@@ -10,8 +10,6 @@ import axios from "axios";
 
 export default function CartView({ product }: { product: CartProduct }) {
   const [state, dispatch] = useContext(CartContext);
-  console.log("cart_products: ", state.cartProducts);
-  console.log("new_cart_item", state.cartItems);
 
   return (
     <div className="">
@@ -33,7 +31,7 @@ export default function CartView({ product }: { product: CartProduct }) {
             <span className="w-6 h-6">
               <Trash2
                 className="cursor-pointer"
-                onClick={() => {
+                onClick={async () => {
                   state.cartProducts.splice(
                     state.cartProducts.indexOf(product),
                     1
@@ -41,6 +39,10 @@ export default function CartView({ product }: { product: CartProduct }) {
                   dispatch({
                     type: "DELETE_FROM_CART",
                     payload: { product: product, items: product.quantity },
+                  });
+                  await axios.put("/api/db/cart/cartProducts", {
+                      id: product._rev,
+                      size: product.orderSize,
                   });
                 }}
               />
@@ -77,7 +79,11 @@ export default function CartView({ product }: { product: CartProduct }) {
                       totalAmount: total,
                     },
                   });
-                  await axios.patch('api/db/cart/cartProducts', {quantity: product.quantity, id: product._rev});
+                  await axios.patch("api/db/cart/cartProducts", {
+                    quantity: product.quantity,
+                    id: product._rev,
+                    size: product.orderSize,
+                  });
                 }}
                 className="rounded-full"
               >
@@ -94,7 +100,11 @@ export default function CartView({ product }: { product: CartProduct }) {
                     type: "INCREASE_FROM_CART",
                     payload: { product: product, items: 1 },
                   });
-                  await axios.patch('api/db/cart/cartProducts', {quantity: product.quantity, id: product._rev});
+                  await axios.patch("api/db/cart/cartProducts", {
+                    quantity: product.quantity,
+                    id: product._rev,
+                    size: product.orderSize,
+                  });
                 }}
                 className="rounded-full"
               >

@@ -1,15 +1,18 @@
 "use server";
 
-import { db, orders } from "@/lib/drizzle";
+import { db, Orders } from "@/lib/drizzle";
 import { PImage } from "../utils/types";
 import stripe from "@/lib/utils";
 import { MAIN_IMAGE, fetchMainImage } from "../data";
 
 interface OrderDBInterface {
-  order_id: string;
-  product_id: string[];
+  id: number;
+  product_id: string;
+  size: string;
+  quantity: number;
+  user_id: string;
+  payment_id: string;
   status: string;
-  sizes: string[];
 }
 
 export type OrderProduct = {
@@ -22,34 +25,31 @@ export type OrderProduct = {
 };
 
 export interface OrdersData {
-  order_id: string;
   products: OrderProduct[];
-  total: number;
   status: string;
+  total: number;
   created_at: string;
 }
 
 export const getOrdersData = async () => {
-  const ordersTableData: OrderDBInterface[] = await db.select().from(orders);
-
+  const ordersTableData: OrderDBInterface[] = await db.select().from(Orders);
   const orders_data_promises: Promise<OrdersData>[] = ordersTableData.map(
     async (order, i) => {
-      const session = await stripe.checkout.sessions.retrieve(order.order_id);
+      const session = await stripe.checkout.sessions.retrieve(order.payment_id);
       const date = new Date(session.created * 1000);
       const line_items = await stripe.checkout.sessions.listLineItems(
-        order.order_id
+        order.payment_id
       );
-      const image = await fetchMainImage(order.product_id[0].split(",")[i]);
+      const image = await fetchMainImage(order.product_id);
       const products: OrderProduct[] = line_items.data.map((item, pi) => ({
         image: image,
         name: item.description,
         quantity: item.quantity!,
         price: item.price!.unit_amount! / 100,
         subTotal: item.amount_subtotal / 100,
-        size: ordersTableData[i].sizes[pi],
+        size: order.size,
       }));
       return {
-        order_id: order.order_id,
         products: products,
         status: order.status,
         total: session.amount_total! / 100,

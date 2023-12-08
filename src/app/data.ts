@@ -139,7 +139,6 @@ export const fetchProductByID = async (_rev: string) => {
   return product;
 };
 export const fetchProductByCategory = async (_category: string) => {
-  console.log(_category);
   const products: Product[] = await client.fetch({
     query: `
       *[_type == "product" && category->name == "${_category}"]{

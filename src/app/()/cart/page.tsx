@@ -50,7 +50,7 @@ export default function Page() {
               className="cursor-pointer"
               onClick={async () => {
                 dispatch({ type: "CLEAR_CART" })
-                await axios.delete('/api/db/cart/cartProducts');
+                await axios.delete('/api/db/cart');
               }}
             >
               <Trash2 />
