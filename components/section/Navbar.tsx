@@ -44,7 +44,7 @@ const Navbar = ({
   // const { cartItems } = useContext(CartContext);
   const router = useRouter();
   const [state, dispatch] = useContext(CartContext);
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const { isSignedIn, user, isLoaded } = useUser();
 
   return (
@@ -111,21 +111,21 @@ const Navbar = ({
         </SignInButton>
       )}
 
-      {/* <div className="lg:hidden">
-        <Sheet open={isOpen}>
-          <SheetTrigger onClick={() => setIsOpen(true)}>
+      <div className="lg:hidden">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger>
             <Menu />
           </SheetTrigger>
           <SheetContent className="w-[300px]">
             <SheetHeader className="gap-y-1">
               {navLinks != null
-                ? navLinks.slice(0, 6).map((category: Category) => (
+                ? navLinks.slice(0, 6).map((category: Category, index) => (
                     <SheetTitle
                       className=" text-lg"
-                      key={category.id}
-                      onClick={() => setIsOpen(false)}
+                      key={index}
+                      onClick={() => setOpen(false)}
                     >
-                      <Link href={`/shop/${category.name}`} key={category.id}>
+                      <Link href={`/shop/${category.name}`}>
                         {category.name}
                       </Link>
                     </SheetTitle>
@@ -136,7 +136,7 @@ const Navbar = ({
                   className={`w-full gap-x-2 ${sora.className} tracking-wider`}
                   onClick={() => {
                     router.push("/cart");
-                    setIsOpen(false);
+                    setOpen(false)
                   }}
                 >
                   Cart{" "}
@@ -148,7 +148,7 @@ const Navbar = ({
             </SheetHeader>
           </SheetContent>
         </Sheet>
-      </div> */}
+      </div>
     </div>
   );
 };
