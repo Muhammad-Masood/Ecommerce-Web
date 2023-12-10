@@ -1,4 +1,4 @@
-import { ProductView } from "components/section/ProductView"; 
+import  ProductView from "components/section/ProductView"; 
 import { Product } from "@/app/utils/types";
 import { fetchProductByID } from "@/app/data";
 

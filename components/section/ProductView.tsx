@@ -16,7 +16,7 @@ import axios from "axios";
 import { CartProduct } from "@/reducer/CartReducer";
 import toast from "react-hot-toast";
 
-export const ProductView = (product: Product) => {
+const ProductView = (product: Product) => {
   const {
     size,
     images,
@@ -172,9 +172,9 @@ export const ProductView = (product: Product) => {
                 <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
               </Button>
             ) : (
+              // <div>sjdhsj</div>
               <SignInButton
                 mode="modal"
-                afterSignInUrl={`${router.push(`/shop`)}`}
               >
                 <Button className={`bg-black py-6  ${sora_d.className}`}>
                   <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
@@ -217,3 +217,4 @@ export const ProductView = (product: Product) => {
     </div>
   );
 };
+export default ProductView;
